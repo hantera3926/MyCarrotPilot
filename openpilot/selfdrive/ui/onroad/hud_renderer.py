@@ -676,7 +676,7 @@ class HudRenderer(Widget):
     sm = ui_state.sm
     ov = self._set_speed_override.compute(sm, float(self.set_speed))
 
-    # Personal UI: decorative speed background hidden.
+    self._draw_texture_rect(self._txt_speed_bg, bx - 100, by - 60, 350, 150)
 
     cur_speed_int = 123 if self._debug_speed_panel else int(round(self.speed))
     cur_text = str(cur_speed_int)

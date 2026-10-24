@@ -751,7 +751,7 @@ class HudRenderer(Widget):
     panel_y = int(rect.y + rect.height - panel_h - margin_y)
 
     # draw background
-    rl.draw_texture(bg, panel_x, panel_y, rl.WHITE)
+    # Personal UI: decorative mici speed background hidden.
 
     # ----- current speed (big, left) -----
     if self._debug_speed_panel:
