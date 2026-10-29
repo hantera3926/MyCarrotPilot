@@ -21,6 +21,8 @@ The default-off `AutoTurnControlRightLaneChange` option under ATC details adds t
 
 After one second of qualifying conditions, the existing physical-indicator path lights the right lamp. Its feedback enters the unchanged ordinary lane-change logic; no separate lane-change command is sent. A repeat requires observed completion, lamps off, two seconds of waiting and a fresh condition check. Steering/manual intervention, lost inputs or a failed start cancels repetition in the current TBT window. Manual/remote admission is unchanged. Existing ATC turns/lane changes remain available. The add-on is inactive in mode 0 (off) and 3 (speed only). On restart, the retired mode 4 migrates to mode 1 with the add-on enabled, without newly enabling speed control. Desktop tests are not physical lamp or road acceptance.
 
+The 250 m option only supplies a physical right-indicator request. Existing ATC preparation, audio and DesireHelper lane-change decisions retain the implementation from before this add-on. The add-on may request its lamp during matching ATC right-lane preparation when its conditions pass; it does not rewrite navigation commands, lane-change desires or existing ATC entry gates.
+
 | Participant | Responsibility | Not responsible for |
 |---|---|---|
 | Driver | Check mirrors, blind spot, and closing traffic; select a safe gap; signal; cancel or intervene when needed | Delegating the safety decision to the system |
