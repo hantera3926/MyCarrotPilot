@@ -1,5 +1,32 @@
 # Repository memory
 
+- Later on 2026-10-31, EV6 nine full logs/110415270B hash-matched confirm same
+  Light speed33ba/mici USB AMD. Cameras10800each consecutive; ordinary34skips/
+  odo34invalid -> pose49inputs-invalid, sensors/posenetalltrue. Segment9 at
+  09:11:52KST eGPU150ms response timeout falls back internal; published model
+  gap667.913ms/13missing IDs includes handling, not GPUcompute. Segments10-13
+  internal only/no poseerrors, NOT healthy Light speed. EGPU meanloop50.268ms,
+  infer45.760/upload20.068/checkpoint3.983. Matching NAS automaticcapture has
+  worker output_read123.169ms/pipe_wait; marker also covers validation/checkpoint
+  so exact stall stage unproven. USB5000active/no incident disconnect in excerpt.
+  No process restart/thermal/sensor rejection, no tinygrad causal A/B. Report-only;
+  same-device matched-package comparison plus finer failure stages needed.
+  See docs/light_speed_locationd_review_20261031.md; raw/private/no live writes.
+
+
+- On 2026-10-31, supplied Oct30/10bf0a56 partial rlog confirms Light speed
+  33ba0928 on mici USB AMD, NOT Jetson. Consecutive cameras549 each; model19
+  one-frame skips/odometry19invalid -> livePose44inputs-invalid, sensors/posenet
+  allhealthy; calibration5invalid envelopes extend five episodes. Alert24.691s
+  includes persistence/pre-segment onset. Mean loop51.723ms vs50ms, inference
+  47.130, upload19.965/checkpoint3.950; no process restart/thermal/sensor rejection.
+  PR39184 reverts0152 Chestnut plus tinygrad; existing Flip Flop already retains
+  f0667cf6+02e698. No global revert needed; do not mix Light33ba with old runtime.
+  No causal tinygrad A/B or proven cure; report-only, no runtime/selection/device
+  changes. JetsonONNX/TRT unaffected by revert; hardware validation needs power.
+  See docs/light_speed_locationd_review_20261031.md; raw evidence stays private.
+
+
 - On 2026-10-31, owner requests recent-intent manual indication and blocking centre
   lines/road edges/unknown adjacent lanes. Manual-only episode retains confirmed
   torque1.5s/4s max through release/countersteer while approaching; stop0.3s/retreat
