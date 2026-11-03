@@ -75,3 +75,22 @@ transfer, or confirms offroad. The board accepts this separately authenticated
 manifest only outside an active CAN transmission and ignores control commands
 until the update finishes or aborts. Add --quiet-bus when upgrading an earlier
 board that does not yet support the parked manifest.
+## Automatic updates after Git Pull
+
+The comma checkout includes CarrotB1.bin. After the usual Git Pull and reboot,
+Carrot Web checks the authenticated, registered board even while the car is
+moving. Automatic updates wait for the indicator to be idle for four seconds,
+with no queued request or hold, then recheck the board state and lamps before
+starting. During transfer the S3 automatic indicator is unavailable and the
+C3/C4 badge shows an update in progress. Only the S3 reboots after verification.
+The manual command above retains its Park guard.
+A new release installs over BLE and the running ELF build ID is read after
+reconnection. The current build is skipped, newer board releases are preserved
+and conflicting builds with the same release number are reported. Failed
+transfers back off. A legacy board without the diagnostic characteristic
+requires a quiet CAN bus for its first update.
+
+For a release, increment RELEASE_TAG in the sketch, build the application with
+the board settings above, and commit its CarrotB1.ino.bin as tools/carrot_b1/CarrotB1.bin
+in the same change. The release number and ELF identity are extracted from the
+bundled app image. Never package a device flash dump or its enrollment data.
