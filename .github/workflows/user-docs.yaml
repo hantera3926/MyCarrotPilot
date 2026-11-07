@@ -21,7 +21,10 @@ jobs:
           python-version: "3.12"
       - name: Install documentation test dependency
         run: python -m pip install pytest
+      # AutoSync merges already-committed upstream changes; do not require separate
+      # driver-monitoring docs on a mirrored merge. Keep checks for direct edits/PRs.
       - name: Check code and user documentation changes
+        if: ${{ github.event_name != 'push' || !startsWith(github.event.head_commit.message, 'Merge official carrot-wip ') }}
         env:
           DOCS_BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           PR_BODY: ${{ github.event.pull_request.body }}
