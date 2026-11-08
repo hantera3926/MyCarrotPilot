@@ -95,17 +95,19 @@ public final class RecoveryInstrumentation extends Instrumentation {
           check(target.startsWith(next + "/api/assistant/connection/")); // never contact the relay
           if (target.endsWith("/proof")) {
             JSONObject proofs = new JSONObject();
-            if (knownDevice) proofs.put("drive",ConnectionPolicy.proof(grant,body.getString("nonce"),old,next));
+            if (knownDevice) for (String role : new String[]{"drive","settings"})
+              proofs.put(role,ConnectionPolicy.proof(grant,body.getString("nonce"),old,next));
             return new JSONObject().put("proofs",proofs);
           }
           check(target.endsWith("/move")); moves[0]++; return new JSONObject();
         });
         storage(direct,old,bundle(browser).put(ConnectionRecovery.SESSION,JSONObject.NULL));
-        storage(direct,next,bundle(browser).put(ConnectionRecovery.SESSION,JSONObject.NULL).put(ConnectionRecovery.key("drive"),JSONObject.NULL));
+        storage(direct,next,bundle(browser).put(ConnectionRecovery.SESSION,JSONObject.NULL).put(ConnectionRecovery.key("drive"),JSONObject.NULL).put(ConnectionRecovery.key("settings"),JSONObject.NULL));
         check(run(direct,old).isEmpty());
         JSONObject restored = storage(direct,next,null);
         check(restored.isNull(ConnectionRecovery.SESSION));
         check(knownDevice ? grant.equals(restored.optString(ConnectionRecovery.key("drive"))) : restored.isNull(ConnectionRecovery.key("drive")));
+        check(knownDevice ? grant.equals(restored.optString(ConnectionRecovery.key("settings"))) : restored.isNull(ConnectionRecovery.key("settings")));
         check(moves[0] == (knownDevice ? 1 : 0));
         runOnMainSync(direct::cancel);
       }
@@ -158,10 +160,44 @@ public final class RecoveryInstrumentation extends Instrumentation {
         String visible=visibleText(screen.findViewById(android.R.id.content));
         check(visible.contains("Looking for Carrot")); check(visible.contains("Search again"));
         check(visible.contains("Enter IP address")); check(!visible.matches("(?s).*[가-힣].*"));
-        screen.finish();
       });
+      checkInstructionsCopy(screen, java.util.Locale.KOREAN);
+      checkInstructionsCopy(screen, java.util.Locale.ENGLISH);
+      runOnMainSync(screen::finish);
       result.putString("stream","Recovery WebView checks passed: " + checks + "\nEnglish native search screen verified.\n"); finish(-1,result);
     } catch (Throwable error) { result.putString("stream","FAILED: " + android.util.Log.getStackTraceString(error)); finish(0,result); }
+  }
+  private android.view.View windowText(String label, int flags) {
+    java.util.ArrayList<android.view.View> found = new java.util.ArrayList<>();
+    for (android.view.View root : android.view.inspector.WindowInspector.getGlobalWindowViews()) {
+      root.findViewsWithText(found, label, flags);
+    }
+    for (android.view.View view : found) if (view.isShown()) return view;
+    throw new AssertionError("Missing visible view: " + label);
+  }
+  private void checkInstructionsCopy(android.app.Activity screen, java.util.Locale locale) {
+    boolean korean = locale.equals(java.util.Locale.KOREAN);
+    runOnMainSync(() -> {
+      java.util.Locale.setDefault(locale);
+      windowText("Device name", android.view.View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION).performClick();
+    });
+    waitForIdleSync();
+    runOnMainSync(() -> windowText(korean ? "ChatGPT 맞춤 지침 복사" : "Copy ChatGPT instructions",
+      android.view.View.FIND_VIEWS_WITH_TEXT).performClick());
+    waitForIdleSync();
+    runOnMainSync(() -> {
+      android.content.ClipboardManager manager = screen.getSystemService(android.content.ClipboardManager.class);
+      android.content.ClipData clip = manager.getPrimaryClip();
+      check(clip != null && clip.getItemCount() == 1);
+      String prompt = clip.getItemAt(0).getText().toString();
+      check(prompt.contains("CarrotAssist") && prompt.contains(korean ? "왼쪽으로 차로 변경해" : "change lanes left"));
+      android.widget.TextView message = (android.widget.TextView)windowText(korean ? "‘성격’" : "Personality",
+        android.view.View.FIND_VIEWS_WITH_TEXT);
+      check(message.getText().toString().contains(prompt));
+      check(message.getText().toString().contains(korean ? "사용자 지정 지침" : "Custom instructions"));
+      windowText(korean ? "확인" : "Done", android.view.View.FIND_VIEWS_WITH_TEXT).performClick();
+    });
+    waitForIdleSync();
   }
   private void checkFloatingButton() {
     android.content.Context context = getTargetContext();
