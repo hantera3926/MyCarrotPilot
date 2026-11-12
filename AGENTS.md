@@ -1,5 +1,59 @@
 # Repository memory
 
+- 2026-11-12: Owner requests SD-only automatic Super firmware provisioning.
+  Official NVIDIA capsule path is available. R2 excluded /opt/ota_package and
+  mounted EFI read-only; restore official36.4.7 Super capsule from pinned deb
+  b7600d3c65be858e8de2b46764221e128f472480fe801b411072d874326adfc2,
+  capsule50796752B SHA256fc07e537329561d520052d2e45a09c516ed430369078224971ed70f5bbe1ec2f.
+  Image-only bootstrap validates P3767-0005/P3768, bootable36.x<=36.4.7,
+  root-SD/EFI/DATA and NVIDIA spec. Stage via vendor capsule helper, temporarily
+  remount EFI rw, verify bytes/UEFI request, automatic reboot before GPU users.
+  Device-bound durable DATA transaction stops repeated failed updates. Next
+  boot verifies capsule status1, changed slot,36.4.7,Super DT and MAXN_SUPER GPU
+  ceiling before inference. Already-matching boards only verify power. Keep
+  vendor spec discovery/boot verification; serialize its automatic capsule work.
+  USB boot screen reports progress/failures. APP remains read-only. Existing
+  GitPull does not install image provisioning. Pre36 firmware unable to boot
+  this SD still requires NVIDIA's prerequisite path; no arbitrary downgrade.
+  Final review found fresh-image DATA admission still requiring last-loaded.json
+  after the builder removed reference engines. Withhold the initial0.6 package;
+  add an explicit preloaded-model marker and installed-helper chroot admission
+  check, preserving legacy completed-runtime checks. Rebuild pending.
+  Codea4a2c898d5 plus EFI dirty-bit repair2b87210c09. ARM image43202280805 and
+  integration43202279539/full-build43202279581/eGPU/docs CI pass. Local60/5skip;
+  native provisioning23 pass. Windows actual ZIP CRC/bundled-Python preparation
+  matches raw40GiB SHA2565e0da1b97485f3f06cfc809d6ddff446a868a8dfe0fd1c65e90a3ed386cc8c54.
+  Compressed8536959134B SHA2564cb5db4e006e41433adcc866f10252d9bb2fec68ad1f7f75229e217fb8c80620;
+  ZIP8561659547B SHA256a8369698a89ec045499e9dec64ab20619c0ae3eec06c7e418814648fd4a540a8.
+  These hashes identify the withheld initial0.6 candidate. Independent checks confirm helper/source/hash/consumer ordering
+  and clean EFI with capsule space. Physical QSPI update/boot/power interruption
+  and reporter39ms improvement unverified. No live device writes. Evidence
+  .analysis/scratch/2026-11-12-super-bootstrap; publication pending final readback.
+
+- 2026-11-12: Ioniq5 b4dcfe6ce00fe149 route0d/13..15 on d37a6d30 confirms
+  host5a2784cc applied but174 samples all super_profile_missing,15W, GPU624.75MHz,
+  EMC2133MHz. Device-tree p3767-0005 lacks Super suffix; NVIDIA nvpower.sh
+  relinks the public R2 image's existing Super profile to ordinary15W/7W.
+  Orin Nano8GB hardware supports Super; exact QSPI version is unrecorded.
+  Model56.722ms/all2873over50,727 frame gaps exactly match invalid odometry;
+  host execution/completion38.895ms, CPU core means4.9..22%,60..61C/no throttle,
+  no USB timeout/disconnect in these segments. CruiseMismatch also present;
+  do not infer it shares this cause. Add explicit super_firmware_required.
+  N16 host0cb67d46cc4ac448326cc9b272ebfebdc6fde797 signed/published67195643B,
+  SHA256 ed22268f318a9db35de78049b0bc88ebfb09df00c9c661c558bb32e23cf98ccd.
+  HTTPS/full hash/signature verified, Jetson43177120838 and full-build CI pass.
+  SD build43177492508 on ARM64 succeeds with signed N16 in factory/DATA,
+  matching ONNX preloaded and board-specific TensorRT engine built first boot.
+  Raw40GiB SHA256 8da67d9b1eff6d7843a26c825fac307be82201e08e55549b76332d77f8f0d196;
+  compressed8505195694B SHA25629617d9bb36c54768bd8b69685b587efc7520dbb6a57191555b6061048539940.
+  Imports/model hashes/privacy/fsck/GPT/systemd graph pass. Physical boot and
+  firmware repair remain unverified. No live-device or QSPI writes. Evidence
+  .analysis/scratch/2026-11-12-ioniq5-route0d. SD v0.5.0-super-preview published
+  on NAS; full NAS readback hashes and public HTTPS installer/image checks pass.
+  Windows ZIP8529895780B SHA2566c05b5c05e53922663d58529696ff31f683aec1602121873e2da3509e0a729c5.
+  Actual ZIP extraction/CRC and bundled Python preparation in Korean/space path
+  reproduce the raw image hash. Physical SD write/boot/performance unverified.
+
 - 2026-11-12: Ioniq5 b4dcfe6ce00fe149 route0b/12..14 on ffa5723e has174
   fresh host samples, all15W/GPU624.75MHz/EMC2133MHz,53..57C,no thermal throttle,
   CPU core means5..23%,5.2GiB available. Model56.864ms and724 frame gaps exactly
